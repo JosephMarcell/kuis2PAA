@@ -261,3 +261,25 @@ function updateMazeGridTemplate() {
 }
 
 createGrid();
+
+function generateRandomMaze() {
+  if (!grid.length) return;
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const cell = grid[row][col];
+      if (cell.type === 'start' || cell.type === 'end') continue;
+
+      const rand = Math.random();
+      if (rand < 0.3) { // 30% chance to become a wall
+        cell.type = 'wall';
+        cell.element.className = 'cell wall';
+      } else {
+        cell.type = 'empty';
+        cell.pathType = null;
+        cell.element.className = 'cell';
+      }
+    }
+  }
+}
+
