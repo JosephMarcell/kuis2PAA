@@ -6,6 +6,7 @@ let end = null;
 let currentMode = 'wall';
 let isMouseDown = false;
 
+const pathLengthDisplay = document.getElementById('path-length');
 const mazeContainer = document.getElementById('maze');
 
 document.body.addEventListener('mouseup', () => isMouseDown = false);
@@ -88,6 +89,7 @@ async function bfsSolve() {
   const visited = Array(rows).fill().map(() => Array(cols).fill(false));
   const prev = Array(rows).fill().map(() => Array(cols).fill(null));
   visited[start.row][start.col] = true;
+  let foundEnd = false;
 
   while (queue.length > 0) {
     const { row, col } = queue.shift();
@@ -97,7 +99,10 @@ async function bfsSolve() {
       await delay(20);
     }
 
-    if (row === end.row && col === end.col) break;
+    if (row === end.row && col === end.col) {
+      foundEnd = true;
+      break;
+    }
 
     for (const [r, c] of getNeighbors(row, col)) {
       if (!visited[r][c]) {
@@ -109,30 +114,41 @@ async function bfsSolve() {
   }
 
   let path = [];
-  let [r, c] = [end.row, end.col];
-  while (prev[r][c]) {
-    path.push([r, c]);
-    [r, c] = prev[r][c];
-  }
-  for (const [r, c] of path.reverse()) {
-    const cell = grid[r][c];
-    if (cell.type !== 'start' && cell.type !== 'end') {
-      if (cell.pathType === 'dfs') {
-        cell.pathType = 'mixed';
-        cell.element.className = 'cell path-mixed';
-      } else {
-        cell.pathType = 'bfs';
-        cell.element.className = 'cell path-bfs';
-      }
-      await delay(30);
+  if (foundEnd) {
+    let [r, c] = [end.row, end.col];
+    while (prev[r][c]) {
+      path.push([r, c]);
+      [r, c] = prev[r][c];
     }
+
+    path = path.reverse();
+    pathLengthDisplay.textContent = `Path Length: ${path.length}`;
+
+    for (const [r, c] of path) {
+      const cell = grid[r][c];
+      if (cell.type !== 'start' && cell.type !== 'end') {
+        if (cell.pathType === 'dfs') {
+          cell.pathType = 'mixed';
+          cell.element.className = 'cell path-mixed';
+        } else {
+          cell.pathType = 'bfs';
+          cell.element.className = 'cell path-bfs';
+        }
+        await delay(30);
+      }
+    }
+  } else {
+    pathLengthDisplay.textContent = `Path Length: 0 (No path)`;
   }
+  console.log(path);
+
 }
 
 async function dfsSolve() {
   const stack = [{ row: start.row, col: start.col }];
   const visited = Array(rows).fill().map(() => Array(cols).fill(false));
   const prev = Array(rows).fill().map(() => Array(cols).fill(null));
+  let foundEnd = false;
 
   while (stack.length > 0) {
     const { row, col } = stack.pop();
@@ -145,7 +161,10 @@ async function dfsSolve() {
       await delay(20);
     }
 
-    if (row === end.row && col === end.col) break;
+    if (row === end.row && col === end.col) {
+      foundEnd = true;
+      break;
+    }
 
     for (const [r, c] of getNeighbors(row, col)) {
       if (!visited[r][c]) {
@@ -156,25 +175,36 @@ async function dfsSolve() {
   }
 
   let path = [];
-  let [r, c] = [end.row, end.col];
-  while (prev[r][c]) {
-    path.push([r, c]);
-    [r, c] = prev[r][c];
-  }
-  for (const [r, c] of path.reverse()) {
-    const cell = grid[r][c];
-    if (cell.type !== 'start' && cell.type !== 'end') {
-      if (cell.pathType === 'bfs') {
-        cell.pathType = 'mixed';
-        cell.element.className = 'cell path-mixed';
-      } else {
-        cell.pathType = 'dfs';
-        cell.element.className = 'cell path-dfs';
-      }
-      await delay(30);
+  if (foundEnd) {
+    let [r, c] = [end.row, end.col];
+    while (prev[r][c]) {
+      path.push([r, c]);
+      [r, c] = prev[r][c];
     }
+
+    path = path.reverse();
+    pathLengthDisplay.textContent = `Path Length: ${path.length}`;
+
+    for (const [r, c] of path) {
+      const cell = grid[r][c];
+      if (cell.type !== 'start' && cell.type !== 'end') {
+        if (cell.pathType === 'bfs') {
+          cell.pathType = 'mixed';
+          cell.element.className = 'cell path-mixed';
+        } else {
+          cell.pathType = 'dfs';
+          cell.element.className = 'cell path-dfs';
+        }
+        await delay(30);
+      }
+    }
+  } else {
+    pathLengthDisplay.textContent = `Path Length: 0 (No path)`;
   }
+  console.log(path);
+
 }
+
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -192,21 +222,26 @@ function clearPaths() {
     }
   }
 
-function solveMaze() {
-    if (!start || !end) {
-      alert("Please set start and end points!");
-      return;
-    }
-    clearPaths(); // 
-    const algorithm = document.getElementById('algorithm').value;
-    if (algorithm === 'bfs') bfsSolve();
-    else dfsSolve();
+async function solveMaze() {
+  if (!start || !end) {
+    alert("Please set start and end points!");
+    return;
   }
+  clearPaths();
+  const algorithm = document.getElementById('algorithm').value;
+  if (algorithm === 'bfs') {
+    await bfsSolve();
+  } else {
+    await dfsSolve();
+  }
+}
+
 
 function resetMaze() {
   createGrid();
   start = null;
   end = null;
+  pathLengthDisplay.textContent = 'Path Length: 0';
 }
 
 function updateGridSize() {
