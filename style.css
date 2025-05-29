@@ -1,0 +1,102 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(to bottom right, #f9f9fb, #ececf0);
+    margin: 0;
+    padding: 30px;
+    color: #1c1c1e;
+  }
+  
+  #controls {
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    background: #007aff;
+    color: white;
+    font-weight: 500;
+    font-size: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  button:hover {
+    background: #005ecb;
+    transform: scale(1.03);
+  }
+  
+  button:active {
+    transform: scale(0.98);
+  }
+  
+  select, input[type="number"] {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    background-color: #f4f4f7;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  
+  select:focus, input[type="number"]:focus {
+    border-color: #007aff;
+  }
+  
+  #maze {
+    display: grid;
+    justify-content: center;
+    gap: 1px;
+    margin: 0 auto;
+    background-color: #d1d1d6;
+    border-radius: 16px;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  
+  .cell {
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    box-shadow: inset 0 0 0 1px #c7c7cc;
+  }
+  
+  .cell.wall { background: black; }
+  .cell.start { background: green; }
+  .cell.end { background: red; }
+  .cell.visited { background: lightblue; }
+  .cell.path-bfs { background: yellow; }
+  .cell.path-dfs { background: purple; }
+  .cell.path-mixed { background: orange; }
+  
+  @keyframes pulse-bfs {
+    from { background-color: #e0f7fa; }
+    to { background-color: lightblue; }
+  }
+  
+  @keyframes pulse-dfs {
+    from { background-color: #fff3e0; }
+    to { background-color: orange; }
+  }
+  
+  
+
+
+
+
+  /* .cell.wall { background: black; }
+  .cell.start { background: green; }
+  .cell.end { background: red; }
+  .cell.visited { background: lightblue; }
+  .cell.path-bfs { background: yellow; }
+  .cell.path-dfs { background: purple; }
+  .cell.path-mixed { background: orange; } */

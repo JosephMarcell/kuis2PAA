@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Maze Solver Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Maze Solver Game (DFS/BFS)</h1>
+
+  <div class="controls">
+    <label>Rows: <input type="number" id="input-rows" value="20" min="5" max="50"></label>
+    <label>Cols: <input type="number" id="input-cols" value="20" min="5" max="50"></label>
+    <button onclick="updateGridSize()">Apply Grid Size</button>
+    <br><br>
+    <button onclick="setMode('start')">Set Start</button>
+    <button onclick="setMode('end')">Set End</button>
+    <button onclick="setMode('wall')">Set Wall</button>
+    <button onclick="setMode('erase')">Erase</button>
+    <select id="algorithm">
+      <option value="bfs">BFS (Shortest Path)</option>
+      <option value="dfs">DFS (Deep Search)</option>
+    </select>
+    <button onclick="solveMaze()">Solve</button>
+    <button onclick="resetMaze()">Reset</button>
+  </div>
+  
+
+  <div id="maze"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
